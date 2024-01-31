@@ -6,6 +6,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go-logr/logr"
 )
 
 //go:embed templates/*
@@ -20,7 +24,14 @@ func main() {
 
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	routes := gin.Default()
+
+	routes.GET("/click", func(c *gin.Context) {
+		time.sleep(3 * time.Seconds)
+		c.String(http.StatusOK, "Completed")
+	})
+
+	routes.GET("/", func(c *gin.Context) {
 		data := map[string]string{
 			"Region": os.Getenv("FLY_REGION"),
 		}
